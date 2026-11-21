@@ -3,7 +3,7 @@
 .global print_z
 
 .section .text
-print_z
+print_z:
     xor edx, edx
 
 count_chars:

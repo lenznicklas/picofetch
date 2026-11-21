@@ -44,7 +44,7 @@ print_memory:
     push rax
 
     # load ram
-    mov rax, [ripp + mem_info + 32]
+    mov rax, [rip + mem_info + 32]
 
     mov ecx, [rip + mem_info + 104]
     imul rax, rcx

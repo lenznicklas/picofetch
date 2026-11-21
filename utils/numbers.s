@@ -20,7 +20,7 @@ convert_loop:
     dec rsi
     mov [rsi], dl
 
-    text rax, rax
+    test rax, rax
     jnz convert_loop
 
     call print_z

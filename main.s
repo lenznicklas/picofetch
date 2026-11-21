@@ -21,7 +21,7 @@ _start:
 
     lea rsi, [rip + logo]
     call print_z
-    lea rsi, [rip + logo2]
+    lea rsi, [rip + logo_2]
     call print_z
 
     lea rsi, [rip + reset]
