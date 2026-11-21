@@ -22,7 +22,7 @@ print_cpu:
     push r12
 
     lea rdi, [rip + cpu_path]
-    lea rdi, [rip + cpu_buffer]
+    lea rsi, [rip + cpu_buffer]
     mov edx, 8191
     call read_file
 

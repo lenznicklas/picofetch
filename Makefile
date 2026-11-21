@@ -9,7 +9,9 @@ OBJS = main.o \
        modules/memory.o \
        modules/cpu.o \
 	   utils/colors.o \
-	   utils/string.o
+	   utils/string.o \
+	   utils/file.o \
+	   modules/disk.o
 
 picofetch: $(OBJS)
 	$(LD) $(OBJS) -o picofetch

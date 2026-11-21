@@ -6,6 +6,7 @@
 .extern print_uptime
 .extern print_memory
 .extern print_cpu
+.extern print_disk
 .extern cyan
 .extern newline
 
@@ -35,8 +36,9 @@ _start:
     lea rsi, [rip + newline]
     call print_z
 
-    call print_memory
     call print_cpu
+    call print_memory
+    call print_disk
 
     mov eax, 60
     xor edi, edi

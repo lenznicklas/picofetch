@@ -70,6 +70,9 @@ print_memory:
     push r8
     call print_number
 
+    lea rsi, [rip + unit]
+    call print_z
+
     lea rsi, [rip + slash]
     call print_z
 
