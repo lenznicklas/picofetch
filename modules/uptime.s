@@ -3,15 +3,14 @@
 
 .extern print_z
 .extern print_number
+.extern blue
+.extern reset
+.extern newline
 
 .section .rodata
 uptime_label: .asciz "  Uptime  "
 hour_suffix: .asciz "h "
 min_suffix:  .asciz "min"
-
-blue:       .asciz "\033[34m"
-reset:      .asciz "\033[0m"
-newline:    .asciz "\n"
 
 .section .bss
 up_info: .skip 112

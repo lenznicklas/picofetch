@@ -2,15 +2,14 @@
 .global print_cpu
 
 .extern print_z
+.extern magenta
+.extern reset
+.extern newline
 
 .section .rodata
 cpu_path:  .asciz "/proc/cpuinfo"
 cpu_label: .asciz "  CPU     "
 cpu_key:   .asciz "model name"
-
-blue:      .asciz "\033[34m"
-reset:     .asciz "\033[0m"
-newline:   .asciz "\n"
 
 .section .bss
 cpu_buffer: .skip 8208
@@ -123,7 +122,7 @@ cpu_terminate:
     mov byte ptr [rsi], 0
 
 cpu_print:
-    lea rsi, [rip + blue]
+    lea rsi, [rip + magenta]
     call print_z
 
     lea rsi, [rip + cpu_label]

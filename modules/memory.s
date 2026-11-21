@@ -3,15 +3,14 @@
 
 .extern print_z
 .extern print_number
+.extern magenta
+.extern reset
+.extern newline
 
 .section .rodata
 mem_label: .asciz "  Memory  "
 slash:     .asciz " / "
 unit:      .asciz " MiB"
-
-blue:      .asciz "\033[34m"
-reset:     .asciz "\033[0m"
-newline:   .asciz "\n"
 
 .section .bss
 mem_info: .skip 112
@@ -57,7 +56,7 @@ print_memory:
     push rax
 
     # effective print
-    lea rsi, [rip + blue]
+    lea rsi, [rip + magenta]
     call print_z
     lea rsi, [rip + mem_label]
     call print_z

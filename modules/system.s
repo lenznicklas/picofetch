@@ -1,15 +1,14 @@
 .intel_syntax noprefix
 .global print_system
 .extern print_z
+.extern blue
+.extern reset
+.extern newline
 
 .section .rodata
 os_label:   .asciz "  OS      "
 host_label: .asciz "  Host    "
 kern_label: .asciz "  Kernel  "
-
-blue:       .asciz "\033[34m"
-reset:      .asciz "\033[0m"
-newline:    .asciz "\n"
 
 .section .bss
 sys_info:   .skip 390

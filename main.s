@@ -6,13 +6,12 @@
 .extern print_uptime
 .extern print_memory
 .extern print_cpu
+.extern cyan
+.extern newline
 
 .section .rodata
 logo:       .asciz " /\\   /\\  PicoFetch\n"
 logo_2:     .asciz "/  \\ /  \\ ---------\n"
-cyan:       .asciz "\033[36m"
-reset:      .asciz "\033[0m"
-newline:    .asciz "\n"
 
 .section .text
 _start:
@@ -32,6 +31,10 @@ _start:
 
     call print_system
     call print_uptime
+
+    lea rsi, [rip + newline]
+    call print_z
+
     call print_memory
     call print_cpu
 
