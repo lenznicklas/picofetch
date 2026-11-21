@@ -14,7 +14,8 @@ disk_label: .asciz "  Disk    "
 slash:      .asciz " / "
 unit:       .asciz " GiB"
 percent_l:  .asciz " ("
-percent_r:  .asciz "%)"
+percent:    .asciz "%"
+percent_r:  .asciz ")"
 dot:        .asciz "."
 
 .section .bss
@@ -102,8 +103,17 @@ percent_ready:
     lea rsi, [rip + percent_l]
     call print_z
 
+    lea rsi, [rip + magenta]
+    call print_z
+
     mov rax, r14
     call print_number
+
+    lea rsi, [rip + percent]
+    call print_z
+
+    lea rsi, [rip + reset]
+    call print_z
 
     lea rsi, [rip + percent_r]
     call print_z
