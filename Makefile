@@ -8,7 +8,8 @@ OBJS = main.o \
        modules/uptime.o \
        modules/memory.o \
        modules/cpu.o \
-	   utils/colors.o
+	   utils/colors.o \
+	   utils/string.o
 
 picofetch: $(OBJS)
 	$(LD) $(OBJS) -o picofetch

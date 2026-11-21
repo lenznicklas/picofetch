@@ -2,6 +2,9 @@
 .global print_cpu
 
 .extern print_z
+.extern find_string
+.extern read_file
+
 .extern magenta
 .extern reset
 .extern newline
@@ -18,71 +21,28 @@ cpu_buffer: .skip 8208
 print_cpu:
     push r12
 
-    mov eax, 2
     lea rdi, [rip + cpu_path]
-    xor esi, esi
-    xor edx, edx
-    syscall
+    lea rdi, [rip + cpu_buffer]
+    mov edx, 8191
+    call read_file
 
     test rax, rax
-    js cpu_done
-
-    mov r12, rax
-
-    mov eax, 0
-    mov rdi, r12
-    lea rsi, [rip + cpu_buffer]
-    mov edx, 8191
-    syscall
-
-    mov r8, rax
-
-    mov eax, 3
-    mov rdi, r12
-    syscall
-
-    test r8, r8
     jle cpu_done
 
     lea rsi, [rip + cpu_buffer]
-    mov byte ptr [rsi + r8], 0
+    lea rdi, [rip + cpu_key]
+    call find_string
 
-find_cpu:
-    cmp byte ptr [rsi], 0
-    je cpu_done
+    test rax, rax
+    jz cpu_done
 
-    cmp byte ptr [rsi], 'm'
-    jne cpu_next
-
-    cmp byte ptr [rsi + 1], 'o'
-    jne cpu_next
-
-    cmp byte ptr [rsi + 2], 'd'
-    jne cpu_next
-
-    cmp byte ptr [rsi + 3], 'e'
-    jne cpu_next
-
-    cmp byte ptr [rsi + 4], 'l'
-    jne cpu_next
-
-    cmp byte ptr [rsi + 5], ' '
-    jne cpu_next
-
-    cmp byte ptr [rsi + 6], 'n'
-    jne cpu_next
-
-    cmp byte ptr [rsi + 7], 'a'
-    jne cpu_next
-
-    cmp byte ptr [rsi + 8], 'm'
-    jne cpu_next
-
-    cmp byte ptr [rsi + 9], 'e'
-    jne cpu_next
+    lea rsi, [rax + 10]
 
 find_colon:
     cmp byte ptr [rsi], 0
+    je cpu_done
+
+    cmp byte ptr [rsi], 10
     je cpu_done
 
     cmp byte ptr [rsi], ':'
@@ -90,10 +50,6 @@ find_colon:
 
     inc rsi
     jmp find_colon
-
-cpu_next:
-    inc rsi
-    jmp find_cpu
 
 cpu_found:
     inc rsi
@@ -131,6 +87,7 @@ cpu_print:
     lea rsi, [rip + reset]
     call print_z
 
+    # write cpu name
     mov rsi, r12
     call print_z
 
