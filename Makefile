@@ -11,7 +11,8 @@ OBJS = main.o \
 	   utils/colors.o \
 	   utils/string.o \
 	   utils/file.o \
-	   modules/disk.o
+	   modules/disk.o \
+	   utils/progress.o
 
 picofetch: $(OBJS)
 	$(LD) $(OBJS) -o picofetch

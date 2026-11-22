@@ -12,7 +12,7 @@
 
 .section .rodata
 logo:       .asciz " /\\   /\\  PicoFetch\n"
-logo_2:     .asciz "/  \\ /  \\ ---------\n"
+logo_2:     .asciz "/  \\ /  \\ ━━━━━━━━━━━━\n"
 
 .section .text
 _start:

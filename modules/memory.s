@@ -1,8 +1,11 @@
+
 .intel_syntax noprefix
 .global print_memory
 
 .extern print_z
 .extern print_number
+.extern print_progress
+
 .extern magenta
 .extern reset
 .extern newline
@@ -16,7 +19,13 @@ unit:      .asciz " MiB"
 mem_info: .skip 112
 
 .section .text
+
 print_memory:
+    push r12
+    push r13
+    push r14
+
+    # sysinfo()
     mov eax, 99
     lea rdi, [rip + mem_info]
     syscall
@@ -24,65 +33,101 @@ print_memory:
     test rax, rax
     js memory_done
 
-    # load ram
-    mov rax, [rip + mem_info + 32]
+    # -------------------------
+    # Belegten RAM berechnen
+    # -------------------------
 
-    # load free ram
+    # Total - Free
+    mov rax, [rip + mem_info + 32]
     sub rax, [rip + mem_info + 40]
 
-    # mem_unit
+    # mem_unit berücksichtigen
     mov ecx, [rip + mem_info + 104]
     imul rax, rcx
 
-    # to MiB
+    # Bytes -> MiB
     xor edx, edx
-    mov rcx, 1048576
+    mov ecx, 1048576
     div rcx
 
-    # save used ram
-    push rax
+    # Used MiB
+    mov r12, rax
 
-    # load ram
+    # -------------------------
+    # Gesamten RAM berechnen
+    # -------------------------
+
     mov rax, [rip + mem_info + 32]
 
     mov ecx, [rip + mem_info + 104]
     imul rax, rcx
 
     xor edx, edx
-    mov rcx, 1048576
+    mov ecx, 1048576
     div rcx
 
-    # save ram
-    push rax
+    # Total MiB
+    mov r13, rax
 
-    # effective print
+    # -------------------------
+    # Prozent berechnen
+    # -------------------------
+
+    test r13, r13
+    jz memory_done
+
+    # Used * 100 / Total
+    imul rax, r12, 100
+
+    xor edx, edx
+    div r13
+
+    # Prozent sichern
+    mov r14, rax
+
+    # -------------------------
+    # Ausgabe
+    # -------------------------
+
     lea rsi, [rip + magenta]
     call print_z
+
     lea rsi, [rip + mem_label]
     call print_z
+
     lea rsi, [rip + reset]
     call print_z
 
-    pop rax
-    mov r8, rax
-
-    pop rax
-    push r8
+    # Used
+    mov rax, r12
     call print_number
 
     lea rsi, [rip + unit]
     call print_z
 
+    # Separator
     lea rsi, [rip + slash]
     call print_z
 
-    pop rax
+    # Total
+    mov rax, r13
     call print_number
 
     lea rsi, [rip + unit]
     call print_z
+
+    # -------------------------
+    # Progress Bar
+    # -------------------------
+
+    mov rax, r14
+    call print_progress
+
     lea rsi, [rip + newline]
     call print_z
 
 memory_done:
+    pop r14
+    pop r13
+    pop r12
     ret
